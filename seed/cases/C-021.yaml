@@ -1,0 +1,23 @@
+id: C-021
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: ana
+created_at: '2026-09-22T10:00:00Z'
+fields:
+  order_id: '4357'
+  amount: 31
+  days_since_purchase: 19
+  item_state: unopened
+history:
+- at: '2026-09-22T10:00:00Z'
+  event: created
+- at: '2026-09-22T11:00:00Z'
+  event: decided
+  outcome: approve
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

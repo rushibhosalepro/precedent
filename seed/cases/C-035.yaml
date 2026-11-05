@@ -1,0 +1,24 @@
+id: C-035
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: ana
+created_at: '2026-09-08T10:00:00Z'
+fields:
+  order_id: '4595'
+  amount: 19
+  days_since_purchase: 40
+  item_state: opened
+  reason: changed mind
+history:
+- at: '2026-09-08T10:00:00Z'
+  event: created
+- at: '2026-09-08T11:00:00Z'
+  event: decided
+  outcome: deny
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

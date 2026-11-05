@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+# Runtime state is its own git repository, created by `precedent init`.
+state/
+# Rendered by scripts/render_template.py with this machine's paths.
+precedent.local.template.yaml
+# Switch Console writes agent credentials here.
+.switch/

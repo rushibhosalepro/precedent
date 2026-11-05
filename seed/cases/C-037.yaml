@@ -1,0 +1,24 @@
+id: C-037
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: ravi
+created_at: '2026-09-10T10:00:00Z'
+fields:
+  order_id: '4629'
+  amount: 24
+  days_since_purchase: 8
+  item_state: damaged
+  reason: not as described
+history:
+- at: '2026-09-10T10:00:00Z'
+  event: created
+- at: '2026-09-10T11:00:00Z'
+  event: decided
+  outcome: approve
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

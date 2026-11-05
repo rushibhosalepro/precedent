@@ -1,0 +1,23 @@
+id: C-018
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: ravi
+created_at: '2026-09-19T10:00:00Z'
+fields:
+  order_id: '4306'
+  amount: 64
+  days_since_purchase: 4
+  item_state: unopened
+history:
+- at: '2026-09-19T10:00:00Z'
+  event: created
+- at: '2026-09-19T11:00:00Z'
+  event: decided
+  outcome: approve
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

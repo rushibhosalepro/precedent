@@ -1,0 +1,23 @@
+id: C-041
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: sam
+created_at: '2026-09-14T10:00:00Z'
+fields:
+  order_id: '4697'
+  amount: 64
+  days_since_purchase: 34
+  item_state: unopened
+history:
+- at: '2026-09-14T10:00:00Z'
+  event: created
+- at: '2026-09-14T11:00:00Z'
+  event: decided
+  outcome: deny
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

@@ -1,0 +1,24 @@
+id: C-015
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: sam
+created_at: '2026-09-16T10:00:00Z'
+fields:
+  order_id: '4255'
+  amount: 120
+  days_since_purchase: 32
+  item_state: unopened
+  reason: changed mind
+history:
+- at: '2026-09-16T10:00:00Z'
+  event: created
+- at: '2026-09-16T11:00:00Z'
+  event: decided
+  outcome: deny
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

@@ -1,0 +1,24 @@
+id: C-033
+type: refund
+version: 2
+source_msg: null
+requested_by:
+  id: seed
+  name: sam
+created_at: '2026-09-06T10:00:00Z'
+fields:
+  order_id: '4561'
+  amount: 89
+  days_since_purchase: 8
+  item_state: unopened
+  reason: gift duplicate
+history:
+- at: '2026-09-06T10:00:00Z'
+  event: created
+- at: '2026-09-06T11:00:00Z'
+  event: decided
+  outcome: approve
+  under: manual
+  by: seed
+  by_name: priya
+  approval_msg: null

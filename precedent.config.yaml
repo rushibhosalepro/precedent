@@ -1,0 +1,40 @@
+# Precedent configuration. Copied into the state repository by `precedent init`.
+
+# Who may approve decisions and adopt rules. `id` is the person's Switch sender
+# id, exactly as `read_context` reports it (the `sender` field). Find it by
+# reading one of your own messages in the room on Day 1.
+approvers:
+  - id: "REPLACE_WITH_SWITCH_SENDER_ID"
+    name: priya
+
+currency: INR
+
+# The Switch agent playing each role.
+agents:
+  clerk: precedent-clerk
+  judge: precedent-judge
+  auditor: precedent-auditor
+
+# The room approvals are read from. Fill in after the template creates it.
+# switch:
+#   room_id: "REPLACE_WITH_ROOM_ID"
+
+# Only for rehearsals without Switch: approvals are read from a local JSON
+# file instead of the server. Every ledger then says it is a rehearsal.
+offline_approvals: false
+
+types:
+  refund:
+    fields:
+      order_id:            { type: string,  required: true }
+      amount:              { type: number,  required: true }
+      days_since_purchase: { type: integer, required: true }
+      item_state:          { type: enum, values: [unopened, opened, damaged], required: true }
+      reason:              { type: string,  required: false }
+  expense:
+    fields:
+      employee:            { type: string,  required: true }
+      amount:              { type: number,  required: true }
+      category:            { type: enum, values: [travel, meals, software, equipment, other], required: true }
+      has_receipt:         { type: boolean, required: true }
+      description:         { type: string,  required: false }
