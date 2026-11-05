@@ -63,18 +63,22 @@ uv run python scripts/rehearse.py
 
 ## Run it live with Switch
 
-1. **Switch:** install [Switch Console](https://github.com/sandbox-quantum/switch), start the local server, and connect Slack (or Discord) under messaging apps. Sign in to Claude Code and Codex on the machine.
+1. **Switch:** install [Switch Console](https://github.com/sandbox-quantum/switch), start the local server, connect Slack (or Discord) under messaging apps, link your account, and turn on **Run managed agents on this computer**. Sign in to Claude Code on the machine.
 2. **Engine and state:**
    ```bash
    git clone <this repo> && cd precedent && uv sync
    uv run precedent --home ./state init --config precedent.config.yaml --seed seed/cases
    ```
-3. **Template:** in Switch Console → Templates, import `precedent.template.yaml`. Set `engine_dir` to this checkout's absolute path and `state_dir` to `<checkout>/state`, then run it. It creates the three agents and the `precedent-approvals` room, with you in it.
-4. **Fill in two ids.** Post any message in the room, then run this from any agent's working directory:
+3. **Template:** Switch Console leaves `{params}` unfilled in a managed agent's instructions, so first write your paths into a local copy:
    ```bash
-   uv run --project <engine_dir> precedent inspect --room <room id>
+   uv run python scripts/render_template.py --state-dir <absolute path of ./state>
    ```
-   Copy your `sender` id into `approvers[0].id` and the room id into `switch.room_id`, in `state/precedent.config.yaml`. Commit that change in the state repository (`git -C state commit -am "approver"`). The engine refuses to run with uncommitted edits.
+   In Switch Console → Templates, import `precedent.local.template.yaml` and run it. It creates the three agents and the `precedent-approvals` room, with you in it.
+4. **Fill in the ids.** Post any message in the room. Managed agents keep their credentials under Console's data folder (on Windows, `%APPDATA%\switchdash\agent-controller\servers\<server>\agents\<agent id>\credentials.json`). Point `inspect` at any one of them; the room id is on the room's page, or ask an agent for it:
+   ```bash
+   uv run precedent inspect --room <room id> --credentials <credentials.json>
+   ```
+   In `state/precedent.config.yaml`, set `approvers[0].id` to your `sender`, and add `switch: { room_id: <room id>, credentials: <credentials.json> }`. Commit that in the state repository (`git -C state commit -am "approver"`). The engine refuses to run with uncommitted edits.
 5. Ask the Clerk for a refund.
 
 ## The commands

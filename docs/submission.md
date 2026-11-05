@@ -22,17 +22,17 @@ Next time, the room proposes the decision itself and cites the exact rule versio
 - Python engine (strict schemas, deterministic matcher with true/false/unknown conditions, a backtest that compares whole rule sets, approval verification).
 - State in its own git repository: one commit per transition, append-only case history, immutable rule versions, tamper detection.
 - Agents: three Claude Code agents, run as Switch managed agents.
-- 30 tests; `scripts/rehearse.py` replays the full demo offline.
+- 31 tests; `scripts/rehearse.py` replays the full demo offline. All three flows have also run live on Slack through a real Switch server.
 
 ## Challenges
 - Making an LLM-driven workflow trustworthy: identity comes from Switch, the decision comes from code, and every failure escalates to a person instead of approving.
 - Backtesting honestly: reporting coverage, and treating past disagreement as information, not error.
 
 ## Contributions to Switch (Track 03)
-While building, we found and documented 4 bugs in Switch core, each with a reproduction (see `bugs.md`), including one that stops `switch_core` importing on Windows checkouts.
+While building, we found and documented 5 bugs in Switch (see `bugs.md`), including one that stops `switch_core` importing on Windows checkouts and one that leaves template params unfilled in managed agents' instructions.
 
 ## Links
-- Repo: <fill in>
+- Repo: https://github.com/rushibhosalepro/precedent
 - Demo video: <fill in>
 - Blog post: <fill in>
 - Wispr scorecard: <fill in, if entering>
