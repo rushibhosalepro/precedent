@@ -1,6 +1,6 @@
 # Running Precedent live: checklist and troubleshooting
 
-The steps are in the [README](README.md#try-it). This page adds what we learned doing them on Windows 11, with Switch Console 0.40.1, switch-core 0.31.0 and Claude Code.
+This page is for whoever sets Precedent up for the team. The people asking and deciding only need Slack. The steps are in the [README](README.md#try-it). This page adds what we learned doing them on Windows 11, with Switch Console 0.40.1, switch-core 0.31.0 and Claude Code.
 
 ## Checklist
 

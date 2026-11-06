@@ -2,7 +2,7 @@
 
 **Answer once. Your AI agents remember.**
 
-*For any team that asks one manager the same questions in chat, every week.*
+*For small teams where staff ask one manager for the same yes-or-no decisions in chat, like refunds at an online store.*
 
 Demo video (1:54): https://youtu.be/rHvyygxSsvI
 
@@ -10,9 +10,32 @@ Demo video (1:54): https://youtu.be/rHvyygxSsvI
 
 *A real run in Slack, through a real Switch server. The manager typed a rule in plain words. Before saving it, the Auditor agent tested it on every past case, flagged C-004, C-011 and C-019 as past decisions it would have made differently, and asked for approval.*
 
+## Who it's for
+
+**Small teams where one person keeps answering the same approval questions in chat.** The example we built and tested is an online store's support team, where agents ask their lead whether they can refund an order.
+
+| Who | Example | What they do | What they get |
+|---|---|---|---|
+| **The person asking** | Sam, a support agent | Asks in Slack, in plain words | The same answer the last similar case got, with the rule behind it |
+| **The person deciding** | Priya, the support lead | Teaches a rule once, then confirms cases in one line | No more retyping the same answer, and a test on past cases before any rule is saved |
+| **The person setting it up** | Whoever is technical on the team | Installs Switch and Claude Code, and creates the room from the template | A one-time job |
+
+Sam and Priya only use Slack. They have nothing to install.
+
+**An example.** Sam has an unopened item, returned after 17 days, and asks Priya if it can be refunded. Priya answered the same question last week, but the answer is buried in chat, so Priya answers it again. With Precedent, Priya answers once. The next time, the agent shows Priya the rule and the case, and one line settles it.
+
+**It also fits** other repeated approvals with clear facts, such as expense claims at a startup. An `expense` case type is defined in [`precedent.config.yaml`](precedent.config.yaml), but our demo and live run cover refunds only.
+
+**It isn't for:**
+- one-off judgment calls, where no rule would help
+- teams that want decisions made with nobody watching, because a person confirms every case
+- teams whose approvals already run through a dedicated system that works for them
+
+These are the users we designed for. No real team has used Precedent yet, and the people and past cases in the demo are made up.
+
 ## The problem
 
-Can we refund this? Is this okay to expense? Every team answers the same questions again and again, and the answers live in one manager's head. They get applied a little differently each time, and everything stalls when that person is away. Nobody writes the policy document up front, but the decisions do happen, one at a time, in chat.
+Sam's question is everywhere: can we refund this? Is this okay to expense? The answers live in one manager's head, and they get applied a little differently each time. Nobody writes the policy document up front, but the decisions do happen, one at a time, in chat.
 
 Handing this to an AI agent has its own problem: the agent guesses, and nobody can say why it decided what it did. Precedent keeps the person in charge. The manager answers once, the agents keep that answer as a rule, and next time the agent already knows the answer and the manager just says yes. If a case is different, the agent asks instead of guessing.
 
@@ -67,7 +90,7 @@ There are 31 automated tests, covering all five match results, backtests, approv
 
 - **Sam's forged approval ran only in rehearsal and tests.** The live run used one Slack account, so a second person forging a reply needs a second account to show live. The live refusal above used an agent's message instead.
 - **Tampering is detected, not prevented.** The agents and the engine run as the same OS user, so an agent could edit the files. Every command checks the git state first and stops if anything changed. Prevention would need the engine as a separate service with its own identity.
-- **A person still confirms every case.** Automatic application isn't in this version.
+- **A person still confirms every case.** Automatic application isn't in this version, so cases still wait while the manager is away. The config accepts several approvers, but we've only run it with one.
 - **Chat replies are the approval.** Switch's approval buttons aren't used as the authority, because agent credentials can't read who pressed them yet.
 - **The 42 past cases are synthetic** ([`scripts/make_seed.py`](scripts/make_seed.py)). The animated scenes in the video use the rehearsal's data. Its Slack footage comes from the live run, shown as screenshots.
 - **A backtest only covers the history you have.** Cases missing the needed data are counted as unresolved, and coverage is shown on every report.

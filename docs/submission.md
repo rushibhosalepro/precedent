@@ -20,12 +20,20 @@ Track 01: Best Business Workflow
 | Bugs found in Switch | https://github.com/rushibhosalepro/precedent/blob/main/bugs.md |
 
 ## Short description
-Every team asks the same questions in chat, every week, and the answers live in one manager's head. With Precedent, the manager answers once in Slack and the AI agents keep it as a tested rule. Next time, the agent already knows the answer and the manager just says yes. If a case is different, it asks instead of guessing.
+Precedent is for small teams where staff ask one manager for the same approvals in chat every week, like a support team asking its lead about refunds. The answers live in the manager's head. With Precedent, the manager answers once in Slack and the AI agents keep it as a tested rule. Next time, the agent already knows the answer and the manager just says yes. If a case is different, it asks instead of guessing.
 
 ## Full description
 
+### Who it's for
+Small teams where one person keeps answering the same approval questions in chat. Our example is an online store's support team:
+- **Sam, a support agent,** asks in Slack whether an order can be refunded.
+- **Priya, the support lead,** teaches a rule once, then confirms cases in one line.
+- **Someone technical** sets up Switch and the room once. Sam and Priya only use Slack.
+
+It isn't for one-off judgment calls, or for teams that want decisions made with nobody watching. These are the users we designed for: no real team has used it yet, and the demo's people and cases are made up.
+
 ### The problem
-Can we refund this? Is this okay to expense? Teams answer the same questions again and again. The rules are never written down, get applied a little differently each time, and everything stalls when that one person is away. Nobody writes the policy document up front, but the decisions do happen, one at a time, in chat.
+Can we refund this? Is this okay to expense? The same questions keep coming back. The rules are never written down, and they get applied a little differently each time. Nobody writes the policy document up front, but the decisions do happen, one at a time, in chat.
 
 ### What it does
 Precedent is a Switch room in Slack with three AI agents.
@@ -62,11 +70,11 @@ There are 31 automated tests, and a clean clone installs, passes them, and plays
 
 ### Honest limits
 - Tampering with the state is detected, not prevented, because the agents and engine share an OS user.
-- A person still confirms every case. Automatic application isn't built.
+- A person still confirms every case. Automatic application isn't built, so cases still wait while the manager is away.
 - The demo's 42 past cases are synthetic.
 
 ### Bugs found in Switch
-We documented 5 bugs with evidence and proposed fixes, including one that stops `switch_core` importing on Windows checkouts and one that leaves template params unfilled in managed agents' instructions.
+We reported four bugs in Switch, each with evidence and an offered fix: [#1577](https://github.com/sandbox-quantum/switch/issues/1577) (template params left unfilled in managed agents' instructions), [#1578](https://github.com/sandbox-quantum/switch/issues/1578) (Telegram splitting inside an HTML entity), [#1579](https://github.com/sandbox-quantum/switch/issues/1579) (Discord treating a one-line fence as an open code block) and [#1580](https://github.com/sandbox-quantum/switch/issues/1580) (Mattermost dropping posts over the server's limit). The fixes are ready, and pull requests will follow once the issues are assigned.
 
 ### Inspiration
 Inspired by OneDecision, a winner at the Agents for Humans Hackathon. Precedent brings the idea into team chat, with people and several agents in one room, and approvals verified through Switch.
@@ -85,4 +93,3 @@ Built with Claude Code as a pair programmer, covering the engine, tests, templat
 - [ ] Check the repo opens logged out, and that the video link works in a private window.
 - [ ] Confirm on the Rules tab that the video length and AI voice are within the rules.
 - [ ] Submit by **Nov 7, 11:59 PM IST**. Aim for earlier.
-- [ ] Optional: file bugs 4 and 5 for Track 03, and ask for the `hackathon` label.

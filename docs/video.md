@@ -6,7 +6,7 @@
 
 ## Description
 
-Every team asks the same questions in chat, every week. Can we refund this? Is this okay to expense? The answers live in one manager's head.
+For small teams where staff ask one manager for the same approvals in chat. Can we refund this? Is this okay to expense? The answers live in the manager's head.
 
 Precedent fixes that. Answer once in Slack, and your AI agents remember it as a rule. Next time, the agent already knows the answer and you just say yes. If a case is different, it asks you instead of guessing.
 

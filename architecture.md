@@ -7,6 +7,8 @@ Known limits, accepted for the MVP:
 - Everything here is checked against the Switch repo, not yet against a live server. §12 lists the first integration tests.
 Checked against the Switch repo at `e47cab4`: `docs/TEMPLATES.md`, `examples/agent-templates/`, the agent skill (`console/packages/plugins/src/switch-skill/SKILL.md`), and the agent HTTP API (`core/switch_core/bridges/agent/`).
 
+Users: a person asking in chat, a person deciding (the approver), and whoever sets it up once. See [Who it's for](README.md#who-its-for).
+
 **Three non-negotiables (from the review, adopted):**
 1. A human's approval is verified **by the engine, from Switch's own record**, never from what an agent says.
 2. Every authoritative state change goes **through the engine**, and the engine refuses state it didn't write.
