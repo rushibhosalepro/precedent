@@ -20,7 +20,7 @@ First checked against every open and closed issue and the latest ~150 PRs on 202
 |---|---|---|---|---|
 | 1 | Telegram splits a long message inside an HTML entity (`&lt;` → `&lt` + `;`) | `bridges/collaboration/telegram/chunking.py` | Medium: mangled text in agent replies containing `<`, `>`, `&` | Confirmed by repro |
 | 2 | Discord treats a one-line fence (```` ```npm test``` ````) as opening a code block, so every later chunk gets a stray fence and a repeated header | `bridges/collaboration/discord/chunking.py` | Medium: corrupts long replies | Confirmed by repro |
-| 3 | Mattermost never splits long agent replies; a post over the server's `MaxPostSize` is rejected and dropped with only a log line | `bridges/collaboration/mattermost/adapter.py` | High: the reply is lost and the room sees nothing | Confirmed by reading the code; needs a live check |
+| 3 | Mattermost never splits long agent replies; a post over the server's `MaxPostSize` is rejected and dropped with only a log line | `bridges/collaboration/mattermost/adapter.py` | Low on current servers (limit 262,144 on 12.0.2), higher on older ones (16,383 on 10.5.14): the reply is lost and the room sees nothing | **Confirmed live** |
 | 5 | **Console leaves `{params}` unfilled in a managed agent's `instructions`:** the agent receives `{engine_dir}` literally, though every other field is filled and the docs say params work anywhere | `console/apps/switch-console-desktop/src/renderer/features/templates/use/managed-run.ts` (around line 158) | High for template authors: agents start with broken instructions and no error | **Confirmed live** (found 2026-11-05 running our template) |
 | 4 | **On a Windows checkout, `switch_core` can't be imported:** the connection catalog's `SKILL.md` frontmatter regex only accepts `\n`, and Git for Windows checks those files out with `\r\n` | `core/switch_core/connections/loader.py` (`FRONTMATTER_RE`, line 44); no `.gitattributes` in the repo | High for Windows contributors: tests, `just run` and any import of the app fail at startup | **Confirmed by running it** (found 2026-11-04 while validating our template); already covered by PR #1016 |
 
@@ -104,25 +104,28 @@ if stripped.startswith(_FENCE):
 
 **What happens:**
 - Discord and Telegram split long outbound messages (`chunk_message`), but Mattermost's `send_message` posts the whole body in one `create_post`.
-- Mattermost rejects a message longer than its `MaxPostSize`. The adapter's own comment at line 150 says the default is 4000 and servers can raise it to 16383.
-- `_create_post` catches the exception, logs `Failed to send Mattermost message`, and returns `None`. The room sees nothing, and the agent believes it replied.
-- The adapter already knows about the limit: `_MAX_POST = 4000` is used by `rich_fallback_limit()`. Only the plain message path ignores it.
+- Mattermost rejects a message longer than its `MaxPostSize`, and rejects very large requests outright.
+- `_create_post` catches the exception, logs `Failed to send Mattermost message`, and returns `None`. The room sees nothing.
 - This also goes against the repo's "Fail loud, never fake" rule in `CLAUDE.md`.
 
-**How to confirm live:**
-1. Run `just up`, which starts a local Mattermost.
-2. Connect the bridge.
-3. Have an agent post 20,000 characters.
-4. Expect no post in the channel and one `Failed to send Mattermost message` error in the switch-core log.
+**Tested live on Nov 6, 2026.** The limit depends on the server version, and neither server tested uses the 4,000 in the adapter's comment or in our first report:
 
-**Proposed fix:**
-- Split in `send_message` the way Discord does: line-aware, keeping code fences balanced, at `_MAX_POST`.
+| Mattermost version | `MaxPostSize` reported | Original adapter code | With the fix |
+|---|---|---|---|
+| 12.0.2 | 262144 | 20,000 characters arrive whole; 300,000 are dropped | 20,000 stay one post; 300,000 arrive as 2 posts |
+| 10.5.14 | 16383 | 20,000 characters are dropped | 20,000 arrive as 2 posts; 300,000 as 19 |
+
+So the drop is real, but much less likely on current servers than first reported. These runs called the adapter directly against throwaway local servers, not a full Switch server with an agent.
+
+**Fix:**
+- Read the server's `MaxPostSize` when the adapter connects, and split only above it. If the server doesn't report one, log a warning and split at 4,000.
+- Split the way Discord does: line-aware, keeping code fences balanced.
 - Post the chunks in order in the same thread, and return the first post's id as the message ref.
-- If posting any chunk fails, log it as an error.
+- If a later chunk fails, post a notice in the channel saying the rest didn't arrive.
 
-Before writing the fix, decide the ref and edit semantics with the maintainer in the issue, for example what `update_message` does to a split message.
+`update_message` is unchanged. How it should treat a split message is an open question on the issue.
 
-**Test to add:** a Mattermost adapter test with a fake driver. A 10,000-character body becomes several `create_post` calls, each at or under `_MAX_POST`, all threaded under the same root.
+**Test to add:** a Mattermost adapter test with a fake driver. A body over the limit becomes several `create_post` calls, each within the limit and threaded under the same root, and a body under a higher limit stays one post.
 
 ---
 
