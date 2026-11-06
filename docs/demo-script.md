@@ -1,24 +1,48 @@
-# Demo video script (target 2:45)
+# Demo video script (1:14)
 
-Record the screen at 1080p: Slack (or Mattermost) on the left, a terminal on the right for the last scene.
-**Have ready:** a fresh state (`precedent init … --seed seed/cases`), the template already run, and the ledger document showing "No rules yet".
-**Fallback:** if the live room misbehaves, record `uv run python scripts/rehearse.py` and narrate the same beats.
+The explainer is built with Remotion in `../precedent-video` (`npm run voice`, `npm run music`, then `npm run render` writes `out/precedent.mp4`). The lines below are the on-screen captions and the voice-over; they live in `src/scenes.tsx`. Every case, hash, count and refusal comes from `scripts/rehearse.py`. The first, slower cut is in `precedent-video/archive_v1`.
 
-| Time | On screen | Say (roughly) |
+| Time | Scene | Narration |
 |---|---|---|
-| 0:00–0:15 | A title card: **Precedent, teach your team's agents once, in chat** | "Every team re-decides the same things in chat: refunds, expenses, exceptions. The rules live in one person's head. Precedent turns those decisions into tested rules, and Switch is what makes it safe." |
-| 0:15–0:30 | The Switch room: three agents and Priya | "This is a Switch room in Slack. Three agents: the Clerk takes requests, the Judge checks rules, the Auditor writes new ones. Only Priya can approve, and Switch enforces that." |
-| 0:30–1:05 | **Flow 1.** Sam asks for a refund; the Clerk makes C-043; the Judge says no rule covers it | "No precedent, so the Judge doesn't guess. It asks Priya, and gives her an exact line to reply with. That `#e3cf9b` is a hash of exactly this case and outcome." |
-| | Priya replies `approve C-043 #… make it a rule: unopened up to 30 days` | "She approves, and teaches the room in plain words." |
-| 1:05–1:35 | The Auditor's backtest message | "Before the rule exists, the Auditor replays all 43 past cases with today's rules and with the new one. 95% could be evaluated. 12 newly covered, zero conflicts. And three times Priya denied a case this rule would approve. That's shown as information, not as mistakes, and the rule applies to new cases only." |
-| | Priya: `adopt P-001 #…`; the ledger document updates | "She adopts it. It's now in the room's ledger." |
-| 1:35–1:55 | **Flow 2.** A similar request; the Judge cites P-001@1 | "Next week, a similar case. The Judge cites the exact rule version. One reply." |
-| 1:55–2:15 | **Flow 3.** An opened item; near miss | "An opened item. The rule nearly fits, but the Judge names the condition that fails and refuses to stretch it." |
-| 2:15–2:35 | Terminal: Sam tries to approve (refused); then `git -C state log --oneline` | "And trust: when Sam types the approval line, the engine asks Switch who sent it and refuses. Every decision is a git commit naming the approver's Switch id and the message." |
-| 2:35–2:45 | The architecture diagram from the README | "LLMs read and write language. A deterministic engine decides. Switch carries the conversation and proves who said what. Precedent." |
+| 0:00 | **Cold open:** four real seed cases, then the open questions | Approved. |
+| 0:00 | | Denied. |
+| 0:01 | | Approved. |
+| 0:01 | | Denied. |
+| 0:02 | | Same manager. Same kind of refund. Nobody wrote down why. |
+| 0:05 | | Now hand that job to an AI agent. |
+| 0:08 | | What stops it guessing? What stops someone faking the approval? |
+| 0:11 | **Title** | This is Precedent. Teach your team's agents once, in chat. |
+| 0:15 | **Teaching the room** | A refund request lands in the team's chat. No rule covers it. |
+| 0:19 | | So the agent won't guess. It asks Priya. |
+| 0:21 | | She approves, and in the same reply, teaches a rule. |
+| 0:25 | **The backtest:** 43 cases as tiles | Before it goes live, the rule is replayed against every past decision. |
+| 0:30 | | Twelve cases newly covered. Zero conflicts. |
+| 0:33 | | But look. Three times, Priya denied what this rule would approve. |
+| 0:36 | | She sees that before she says yes. |
+| 0:38 | | Adopted. |
+| 0:39 | **The next cases** | Next week, same kind of request. The agent cites the rule, and Priya confirms in one line. |
+| 0:45 | | Then, nearly the same, but opened. Close isn't good enough. |
+| 0:48 | | It goes back to a person. |
+| 0:50 | **The forged approval:** the climax | So let's try to cheat it. Sam copies the approval line, character for character. |
+| 0:54 | | The agent only passes along a message id. |
+| 0:57 | | The engine asks Switch who really sent it. |
+| 0:59 | | Sam isn't an approver. |
+| 1:00 | | Refused. |
+| 1:00 | | Nothing gets recorded. |
+| 1:03 | **How it's built** | The LLMs only interpret. A deterministic engine decides. |
+| 1:07 | | Switch proves who said what. Every step is a git commit. |
+| 1:11 | **Close** | Teach it once. Every rule tested. Every approval checked. |
 
-**Checklist before recording:**
-- [ ] Notifications are muted, and no tokens are visible in the terminal or Console.
-- [ ] Font size is large enough to read on a phone.
-- [ ] Every approval line is pasted exactly. A typo shows the refusal, which is fine, but not mid-flow.
-- [ ] If entering **Code with Wispr**, dictate the prompts and narration with Wispr Flow, then screenshot Insights for the usage scorecard.
+## What this script deliberately doesn't claim
+- **"Handles it automatically."** Auto-apply isn't in this version, so a matching case still gets Priya's one-line confirmation. The script says so.
+- **"40 of 40 → 9 of 40."** That number from `plan.md` was never measured, so it's left out.
+
+## Update: third cut (1:49)
+The table above is the first cut. The current narration lives in `src/scenes.tsx`. It now opens on the everyday problem, explains the idea in three plain steps by 0:29 ("Answer once. Your AI agents remember."), then shows it working, with real Slack footage (`public/real/`) and a live refusal.
+
+## Before submitting
+- [x] **Add real footage.** Screenshots from a live Slack run, shown in their own scene and labelled as live.
+- [x] **Complete Flow 2 live.** C-044 was approved under `P-001@1` on the live server (commit `43750ac`).
+- [x] **A live refusal.** Offered as an approval on the live server, the Judge's own message was refused: `precedent-judge is not an approver; approvers: rushibhosale84`.
+- [ ] **Sam's refusal live.** Sam's own forged line has only run in the rehearsal and tests, because the live runs used one Slack identity. It needs a second account. The video's closing note says so.
+- [ ] The voice-over is a synthetic Edge neural voice, so say so if the rules ask. If entering **Code with Wispr**, screenshot Insights for the usage scorecard.
