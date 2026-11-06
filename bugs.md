@@ -1,7 +1,16 @@
 # Switch core: bugs found (for Track 03 PRs)
 
+**Filed on Nov 6, 2026, after re-checking against upstream at `f62ae50f7`:**
+- Bug 5: sandbox-quantum/switch#1577
+- Bug 1: sandbox-quantum/switch#1578
+- Bug 2: sandbox-quantum/switch#1579
+- Bug 3: sandbox-quantum/switch#1580
+- Bug 4: not filed; already covered by PR sandbox-quantum/switch#1016
+
+Each issue asks for the `hackathon` label and assignment. No PR until then.
+
 Repo: https://github.com/sandbox-quantum/switch (local clone: `../switch-core`, at `e47cab4`)
-Checked against every open and closed issue and the latest ~150 PRs on 2026-11-04. None of the bugs below is reported or being fixed yet.
+First checked against every open and closed issue and the latest ~150 PRs on 2026-11-04. That search missed PR #1016, which covers Bug 4 (see below).
 
 > **Track 03 rule, read first:** only issues labelled `hackathon` count, and a PR for an issue that isn't assigned to you won't be judged.
 > So for each bug: **open an issue first** (with the repro below), comment on it tagging `@petr-sandbox` with a plan and asking for the `hackathon` label and to be assigned, and **write no PR code until you're assigned**.
@@ -13,7 +22,7 @@ Checked against every open and closed issue and the latest ~150 PRs on 2026-11-0
 | 2 | Discord treats a one-line fence (```` ```npm test``` ````) as opening a code block, so every later chunk gets a stray fence and a repeated header | `bridges/collaboration/discord/chunking.py` | Medium: corrupts long replies | Confirmed by repro |
 | 3 | Mattermost never splits long agent replies; a post over the server's `MaxPostSize` is rejected and dropped with only a log line | `bridges/collaboration/mattermost/adapter.py` | High: the reply is lost and the room sees nothing | Confirmed by reading the code; needs a live check |
 | 5 | **Console leaves `{params}` unfilled in a managed agent's `instructions`:** the agent receives `{engine_dir}` literally, though every other field is filled and the docs say params work anywhere | `console/apps/switch-console-desktop/src/renderer/features/templates/use/managed-run.ts` (around line 158) | High for template authors: agents start with broken instructions and no error | **Confirmed live** (found 2026-11-05 running our template) |
-| 4 | **On a Windows checkout, `switch_core` can't be imported:** the connection catalog's `SKILL.md` frontmatter regex only accepts `\n`, and Git for Windows checks those files out with `\r\n` | `core/switch_core/connections/loader.py` (`FRONTMATTER_RE`, line 44); no `.gitattributes` in the repo | High for Windows contributors: tests, `just run` and any import of the app fail at startup | **Confirmed by running it** (found 2026-11-04 while validating our template) |
+| 4 | **On a Windows checkout, `switch_core` can't be imported:** the connection catalog's `SKILL.md` frontmatter regex only accepts `\n`, and Git for Windows checks those files out with `\r\n` | `core/switch_core/connections/loader.py` (`FRONTMATTER_RE`, line 44); no `.gitattributes` in the repo | High for Windows contributors: tests, `just run` and any import of the app fail at startup | **Confirmed by running it** (found 2026-11-04 while validating our template); already covered by PR #1016 |
 
 ---
 
@@ -119,6 +128,8 @@ Before writing the fix, decide the ref and edit semantics with the maintainer in
 
 ## Bug 4: switch-core fails to import on a Windows checkout (CRLF in connector skills)
 
+> **Already reported, not filed by us.** Open PR sandbox-quantum/switch#1016 (Oct 22, 2026) covers this same crash and adds a `.gitattributes`. Our earlier duplicate search missed it, so the "Search done" note below is wrong.
+
 **File:** `core/switch_core/connections/loader.py`, `FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)` (line 44), used by `_load_skill`.
 
 **What happens:**
@@ -206,7 +217,5 @@ If it reproduces, the bug is "Console doesn't detect or restart a dead native sw
 
 ## Next steps
 
-1. Open 4 issues (titles above, body = the "What happens" and "Repro" sections). Bug 4 is the easiest to get accepted: it's confirmed, has a one-line root cause, and blocks every Windows contributor.
-2. Comment on each one tagging `@petr-sandbox` with a plan and asking for the `hackathon` label and to be assigned.
-3. Fork the repo and set up the dev environment (`uv sync`, `just test -k chunking`).
-4. Once assigned: fix, add tests, run `just check` and `just test`, and open the PR with `Closes #N`.
+1. Wait for the `hackathon` label and assignment on #1577 to #1580.
+2. Once assigned: run `just check` and `just test`, and open the PR with `Closes #N`.

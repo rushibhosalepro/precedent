@@ -75,7 +75,14 @@ There are 31 automated tests, covering all five match results, backtests, approv
 
 ## Upstream finds
 
-Building this turned up bugs in Switch itself, written up with evidence and proposed fixes in [`bugs.md`](bugs.md). Two examples: Console leaves `{params}` unfilled in a managed agent's instructions, and `switch_core` fails to import on Windows checkouts.
+Building this turned up bugs in Switch itself. We reported four, and each report offers a fix:
+
+- [#1577](https://github.com/sandbox-quantum/switch/issues/1577): Console leaves `{params}` unfilled in a managed agent's instructions. We hit this running Precedent's own template live.
+- [#1578](https://github.com/sandbox-quantum/switch/issues/1578): Telegram can split a long message in the middle of an HTML entity, so `&lt;` becomes `&lt` and `;`.
+- [#1579](https://github.com/sandbox-quantum/switch/issues/1579): Discord treats a one-line code fence as an open code block, which corrupts long replies.
+- [#1580](https://github.com/sandbox-quantum/switch/issues/1580): Mattermost drops replies that are too long for one post, and the room sees nothing.
+
+The details and reproduction steps are in [`bugs.md`](bugs.md). Pull requests will follow once the maintainers assign the issues.
 
 **Transparency note.** Claude Code (Anthropic) was the pair programmer for the engine, tests, template, docs and video, and it's also what runs the three agents. The video's voice-over is AI-generated. The idea is inspired by [OneDecision](https://devpost.com/software/onedecision), a winner at the Agents for Humans Hackathon. Precedent brings it into team chat, with people and several agents in one room, and approvals verified through Switch.
 
